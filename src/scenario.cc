@@ -2,12 +2,12 @@
 #include <esat/sprite.h>
 #include <esat/draw.h>
 #include <stdio.h>
+#include "../include/oxml/Vec4.h"
 
 Scenario::Scenario(){
     printf("Constructor Scenario\n");
-    prueba.width = 30.0f;
-    prueba.height = 30.0f;
-    prueba.pos = 0;
+    width_ = 45.0f;
+    height_ = 45.0f;
 
 }
 
@@ -20,15 +20,30 @@ Scenario::~Scenario(){
 }
 
 void Scenario::Render(){
-    float points[8];
-    points[0] = 0.0f;
-    points[1] = 0.0f;
-    points[2] = prueba.width;
-    points[3] = 0.0f;
-    points[4] = prueba.width;
-    points[5] = prueba.height;
-    points[6] = 0.0f;
-    points[7] = prueba.width;
-    esat::DrawSolidPath(points,4);
+    
+    for (int i = 0; i < filas_; i++){
+        for (int j = 0; j < columnas_; j++){
+            float points[8];
+
+            points[0] = j*width_;
+            points[1] = i*height_;
+
+            points[2] = (j*width_)+width_;
+            points[3] = i*height_;
+
+            points[4] = (j*width_)+width_;
+            points[5] = (i*height_)+height_;
+
+            points[6] = j*width_;
+            points[7] = (i*height_)+height_;
+
+            esat::DrawSetStrokeColor(255, 0, 0,255);
+            //esat::DrawSetStrokeColor((unsigned char) casillas_[i][j].color.x, (unsigned char) casillas_[i][j].color.y, (unsigned char) casillas_[i][j].color.z, (unsigned char) casillas_[i][j].color.w);
+            esat::DrawSetFillColor((unsigned char) casillas_[i][j].color.x, (unsigned char) casillas_[i][j].color.y, (unsigned char) casillas_[i][j].color.z, (unsigned char) casillas_[i][j].color.w);
+            esat::DrawSolidPath(points, 4);
+        }
+        
+    }
+    
 
 }
