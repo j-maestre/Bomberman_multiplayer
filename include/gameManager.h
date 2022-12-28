@@ -7,6 +7,7 @@
 #define __GAME_MANAGER_H__ 1
 
 #include "scenario.h"
+#include "player.h"
 
 class GameManager{
     public:
@@ -20,6 +21,8 @@ class GameManager{
         return *GameManager::instance_;
     }
     void DrawScenario();
+    void DrawPlayer();
+    void PlantBomb(float x, float y);
     
     private:
     GameManager();
@@ -27,9 +30,13 @@ class GameManager{
     void InitScenarios();
     void InitScenario0();
 
+    const int total_scenarios_ = 1;
     static GameManager* instance_;
     int currentScenario_;
     Scenario scenarios_[1];
+
+    int total_players_;
+    Player players_[1];
 
 };
 

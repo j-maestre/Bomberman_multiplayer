@@ -2,11 +2,13 @@
 #include "scenario.h"
 #include <stdio.h>
 #include "oxml/Vec4.h"
+#include "player.h"
 
 GameManager* GameManager::instance_ = nullptr;
 
 GameManager::GameManager(){
     currentScenario_ = 0;
+    total_players_ = 1;
     InitScenarios();
     //scenarios_[0] = new Scenario(); 
     printf("Constructor GameManager\n");
@@ -41,4 +43,17 @@ void GameManager::InitScenarios(){
 void GameManager::DrawScenario(){
     scenarios_[currentScenario_].Render();
 
+}
+
+void GameManager::DrawPlayer(){
+    for (int i = 0; i < total_players_; i++){
+        players_[i].DrawPlayer();
+    }
+    
+    
+}
+
+void GameManager::PlantBomb(float x, float y){
+    printf("Bomba en %f:%f -> %d:%d\n",x,y,(int) (x/45.0f),(int) (y/45.0f));
+    scenarios_[0].casillas_[(int) (y/45.0f)][(int) (x/45.0f)].color = oxml::Vec4(255,0,0,255);
 }

@@ -1,5 +1,6 @@
+#include "oxml/Vec4.h"
+
 struct Casilla{
-    float width;
-    float height;
     int pos;
+    oxml::Vec4 color;
 };

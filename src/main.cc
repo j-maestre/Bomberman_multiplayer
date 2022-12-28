@@ -40,7 +40,7 @@ void RenderFPS(double current_time, double last_time) {
 
 int esat::main(int argc, char **argv) {
   srand(NULL);
-  unsigned int fps=400;
+  unsigned int fps=120;
   double current_time,last_time;
   esat::WindowInit(1400, 810);
   esat::DrawSetTextFont("../data/test.ttf");
@@ -61,6 +61,7 @@ int esat::main(int argc, char **argv) {
     esat::DrawClear(0, 0, 0);
 
     gameManger.DrawScenario();
+    gameManger.DrawPlayer();
 
 
     do{//Control fps
