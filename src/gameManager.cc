@@ -9,6 +9,7 @@ GameManager* GameManager::instance_ = nullptr;
 GameManager::GameManager(){
     currentScenario_ = 0;
     total_players_ = 1;
+    is_server_ = false;
     InitScenarios();
     //scenarios_[0] = new Scenario(); 
     printf("Constructor GameManager\n");

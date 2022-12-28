@@ -4,6 +4,7 @@
 #define _PLAYER_H__ 1
 
 #include <esat/sprite.h>
+#include "cliente.h"
 
 class Player{
 
@@ -21,6 +22,10 @@ class Player{
     void DrawPlayer();
 
     float speed_;
+
+    //Cliente& cli_;
+    //static const Cliente& cli_ = Cliente::Instance();
+    
     private:
 
     esat::SpriteTransform transform_;

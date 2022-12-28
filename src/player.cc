@@ -2,6 +2,7 @@
 #include <esat/input.h>
 #include <stdio.h>
 #include "gameManager.h"
+#include "cliente.h"
 
 Player::Player(){
     positionX_ = 0;
@@ -14,10 +15,9 @@ Player::Player(){
     transform_.scale_x = 0.6f;
     transform_.scale_y = 0.4f;
     speed_ = 1.1f;
-
-    
-
+    //cli_ = Cliente::Instance();
 }
+
 Player::Player(const Player& p){
 
 }
@@ -27,24 +27,41 @@ Player::~Player(){
 
 void Player::MovePlayer(){
 
+    bool has_moved = false;
+
+    float x;
+    float y;
+
     if(esat::IsKeyPressed('W')){
-        transform_.y -= speed_;
+        y = transform_.y - speed_;
+        has_moved = true;
     }
     if(esat::IsKeyPressed('S')){
-        transform_.y += speed_;
+        y = transform_.y + speed_;
+        has_moved = true;
     }
     if(esat::IsKeyPressed('A')){
-        transform_.x -= speed_;
+        x = transform_.x - speed_;
+        has_moved = true;
     }
     if(esat::IsKeyPressed('D')){
-        transform_.x += speed_;
+        x = transform_.x + speed_;
+        has_moved = true;
     }
 
     if(esat::IsSpecialKeyDown(esat::kSpecialKey_Space)){
         printf("Bomba");
 
         GameManager::Instance().PlantBomb(transform_.x,transform_.y);
+        has_moved = true;
     }
+
+    if(has_moved){
+        //Si se ha movido, envio al servidor los datos de hacia donde me quiero mover y el sevidor me moverá y luego me devolvera mi nueva posicion
+        //cli_.Move(x,y);
+    }
+
+
     
 }
 
