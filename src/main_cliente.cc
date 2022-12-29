@@ -14,8 +14,8 @@
 #include <esat_extra/sqlite3.h>
 
 //#include "data_base_controller.h"
-#include "gameManager.h"
 #include "cliente.h"
+#include "gameManager.h"
 
 
 int esat::main(int argc, char **argv) {
@@ -34,6 +34,8 @@ int esat::main(int argc, char **argv) {
   static Cliente& cli = Cliente::Instance();
   cli.Conect();
 
+  //Cliente::Instance().Conect();
+
   //db_controller.OpenDB("../data/chinook2.db");
   
   
@@ -44,7 +46,9 @@ int esat::main(int argc, char **argv) {
 
     gameManger.DrawScenario();
     gameManger.DrawPlayer();
+    gameManger.MovePlayer();
 
+    
 
     do{//Control fps
     		current_time = esat::Time();

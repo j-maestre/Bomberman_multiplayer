@@ -1,5 +1,6 @@
-#ifndef _SERVER_H__
-#define _SERVER_H__ 1
+#ifndef _CLIENTE_H__
+#define _CLIENTE_H__ 1
+
 #include <winsock.h>
 #include "paquete.h"
 
@@ -17,10 +18,12 @@ class Cliente{
 
 
     void Conect();
-    void Move(float x, float y);
-    void Cliente::UpdateStats(Accion action);
+    Movimiento Move(float x, float y, bool bomb);
+    void UpdateStats(Accion action);
+    char my_name_[256];
 
     private:
+    
     Cliente();
     Cliente(const Cliente&){};
     static Cliente *instance_;

@@ -19,6 +19,20 @@
 
 
 int esat::main(int argc, char **argv) {
+  float points[8];
+
+  points[0] = 20.0f;
+  points[1] = 20.0f;
+  
+  points[2] = 200.0f;
+  points[3] = 20.0f;
+
+  points[4] = 200.0f;
+  points[5] = 80.0f;
+  
+  points[6] = 20.0f;
+  points[7] = 80.0f;
+
   srand(NULL);
   unsigned int fps=120;
   double current_time,last_time;
@@ -26,8 +40,8 @@ int esat::main(int argc, char **argv) {
   esat::DrawSetTextFont("../data/test.ttf");
   esat::DrawSetTextSize(25);
   esat::WindowSetMouseVisibility(true);
-  esat::DrawSetFillColor(0, 255, 255, 255);
-  esat::DrawSetStrokeColor(0, 255, 255);
+  esat::DrawSetFillColor(0, 255, 0, 255);
+  esat::DrawSetStrokeColor(0, 255, 0);
 
   GameManager& gameManger = GameManager::Instance();
   Server& server = Server::Instance();
@@ -41,6 +55,15 @@ int esat::main(int argc, char **argv) {
     esat::DrawBegin();
     esat::DrawClear(0, 0, 0);
     server.Listen();
+
+    gameManger.DrawScenario();
+    gameManger.DrawPlayer();
+
+    esat::DrawSetFillColor(0, 255, 0, 255);
+    esat::DrawSetStrokeColor(0, 255, 0);
+    esat::DrawSolidPath(points,4);
+
+
 
 
     do{//Control fps

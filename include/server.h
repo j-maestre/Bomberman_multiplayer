@@ -1,5 +1,6 @@
 #ifndef _SERVER_H__
 #define _SERVER_H__ 1
+
 #include <winsock.h>
 #include "paquete.h"
 
@@ -18,6 +19,8 @@ class Server{
 
     void Deploy();
     void Listen();
+    static const int max_clients_ = 4;
+    char clientes_names_[max_clients_][256];
 
     private:
     Server();
@@ -29,10 +32,8 @@ class Server{
     WSADATA wsa_;
     SOCKET sock_;
     sockaddr_in ip_,ips_[4];
-    static const int max_clients_ = 4;
     
     int total_clients_;
-    char clientes_names_[max_clients_][256];
 
     int ip_size_;
     timeval time_;

@@ -8,6 +8,8 @@
 
 #include "scenario.h"
 #include "player.h"
+#include "paquete.h"
+#include <winsock.h>
 
 class GameManager{
     public:
@@ -23,6 +25,10 @@ class GameManager{
     void DrawScenario();
     void DrawPlayer();
     void PlantBomb(float x, float y);
+    bool MovePlayer();
+    Movimiento Move(int id, Movimiento mov);
+    void AddPlayer(int id);
+    void RecivePlayer();
     bool is_server_;
     
     private:
@@ -39,7 +45,16 @@ class GameManager{
 
 
     int total_players_;
-    Player players_[1];
+    static const int max_players_ = 4;
+    Player players_[max_players_];
+
+    /*WSADATA wsa_;
+    SOCKET sock_;
+    sockaddr_in ip_,ips_[4];
+
+    int ip_size_;
+    timeval time_;
+    fd_set readfs_;*/
 
 };
 

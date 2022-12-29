@@ -2,16 +2,21 @@
 #include "scenario.h"
 #include <stdio.h>
 #include "oxml/Vec4.h"
-#include "player.h"
+#include "server.h"
+#include "cliente.h"
+#include <winsock.h>
+//#include "player.h"
 
 GameManager* GameManager::instance_ = nullptr;
 
 GameManager::GameManager(){
     currentScenario_ = 0;
-    total_players_ = 1;
+    total_players_ = 0;
     is_server_ = false;
     InitScenarios();
-    //scenarios_[0] = new Scenario(); 
+    /*ip_size_ = sizeof(ip_);
+    time_.tv_sec = 0;
+    time_.tv_usec = 100000;*/
     printf("Constructor GameManager\n");
 }
 
@@ -48,13 +53,58 @@ void GameManager::DrawScenario(){
 
 void GameManager::DrawPlayer(){
     for (int i = 0; i < total_players_; i++){
-        players_[i].DrawPlayer();
+        //Pasar el name que tiene que dibujar
+        //El game manager deberia tener guardado todos los nombres de los jugadores
+        //Y tiene que pasarlos todos independientemente si es servidor o cliente
+         players_[i].DrawPlayer("hola");
+        /*if(is_server_){
+            players_[i].DrawPlayer(Server::Instance().clientes_names_[i]);
+        }else{
+            players_[i].DrawPlayer(Cliente::Instance().my_name_);
+        }*/
     }
     
-    
+}
+
+bool GameManager::MovePlayer(){
+    bool moved = false;
+
+    for (int i = 0; i < total_players_; i++){
+
+        if(players_[i].active_){
+           //printf("Active ");
+            players_[i].MovePlayer();
+        }
+    }
+    //printf("\n");
+
+    return moved;
+}
+
+Movimiento GameManager::Move(int id, Movimiento mov){
+    players_[id].transform_.x += mov.x;
+    players_[id].transform_.y += mov.y;
+    Movimiento new_pos = {players_[id].transform_.x, players_[id].transform_.y};
+    return new_pos;
 }
 
 void GameManager::PlantBomb(float x, float y){
     printf("Bomba en %f:%f -> %d:%d\n",x,y,(int) (x/45.0f),(int) (y/45.0f));
     scenarios_[0].casillas_[(int) (y/45.0f)][(int) (x/45.0f)].color = oxml::Vec4(255,0,0,255);
 }
+
+void GameManager::AddPlayer(int id){
+    players_[total_players_].active_ = true;
+    players_[total_players_].id_ = id;
+    players_[total_players_].transform_.x = 0.0f;
+    players_[total_players_].transform_.y = 0.0f;
+    total_players_++;
+    printf("--- Player Added [%d]---\n",total_players_);
+}
+
+
+void GameManager::RecivePlayer(){
+
+
+}
+

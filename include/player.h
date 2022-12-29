@@ -18,18 +18,19 @@ class Player{
     int positionY_;
     int score_;
     int bombs_;
+    bool active_;
+    int id_;
     esat::SpriteHandle sprite_;
-    void DrawPlayer();
+    void DrawPlayer(char name[256]);
+    bool MovePlayer();
 
     float speed_;
 
     //Cliente& cli_;
-    //static const Cliente& cli_ = Cliente::Instance();
+    esat::SpriteTransform transform_;
     
     private:
 
-    esat::SpriteTransform transform_;
-    void MovePlayer();
 
 
 };
