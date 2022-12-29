@@ -21,6 +21,7 @@ class Cliente{
     Movimiento Move(float x, float y, bool bomb);
     void UpdateStats(Accion action);
     char my_name_[256];
+    int my_id_;
 
     private:
     
@@ -35,7 +36,6 @@ class Cliente{
     char nombre_[256];
     Paquete paq_;
 
-    int my_id_;
 
     void ResetPaq();
 

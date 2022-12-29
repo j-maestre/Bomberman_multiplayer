@@ -70,7 +70,7 @@ Movimiento Cliente::Move(float x, float y, bool bomb){
     paq_.action.movimiento = mov;
     paq_.action.bomba = bomb;
 
-    printf("C mueve! %f %f\n",paq_.action.movimiento.x,paq_.action.movimiento.y);
+    //printf("C mueve! %f %f\n",paq_.action.movimiento.x,paq_.action.movimiento.y);
 
     //Enviamos al servidor a donde me quiero mover
     sendto(sock_,(char*)&paq_,sizeof(paq_),0,(SOCKADDR*)&ip_,ip_size_);

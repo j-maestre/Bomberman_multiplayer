@@ -48,13 +48,13 @@ class GameManager{
     static const int max_players_ = 4;
     Player players_[max_players_];
 
-    /*WSADATA wsa_;
+    WSADATA wsa_;
     SOCKET sock_;
     sockaddr_in ip_,ips_[4];
 
     int ip_size_;
     timeval time_;
-    fd_set readfs_;*/
+    fd_set readfs_;
 
 };
 

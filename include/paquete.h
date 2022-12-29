@@ -11,6 +11,11 @@ struct Movimiento{
     float y;
 };
 
+struct NewPlayer{//3
+    int id;
+    char name[256];
+};
+
 struct Accion{ // type 1
     int id;
     Movimiento movimiento;
@@ -20,8 +25,9 @@ struct Accion{ // type 1
 struct Paquete{
     int type;
     union{
-        struct Conexion con; // 0
+        struct Conexion con; //  0
         struct Accion action; // 1
+        struct NewPlayer newP; // 2
     };
 };
 

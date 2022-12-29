@@ -14,9 +14,9 @@ GameManager::GameManager(){
     total_players_ = 0;
     is_server_ = false;
     InitScenarios();
-    /*ip_size_ = sizeof(ip_);
+    ip_size_ = sizeof(ip_);
     time_.tv_sec = 0;
-    time_.tv_usec = 100000;*/
+    time_.tv_usec = 100000;
     printf("Constructor GameManager\n");
 }
 
@@ -56,7 +56,18 @@ void GameManager::DrawPlayer(){
         //Pasar el name que tiene que dibujar
         //El game manager deberia tener guardado todos los nombres de los jugadores
         //Y tiene que pasarlos todos independientemente si es servidor o cliente
-         players_[i].DrawPlayer("hola");
+
+        if(is_server_){
+            players_[i].DrawPlayer("hola");
+        }
+
+        //Me pinto a mi mismo
+        if(players_[i].id_ == Cliente::Instance().my_id_){
+            players_[i].DrawPlayer("hola");
+        }else{
+            //Pintar los demas jugadores
+            players_[i].DrawOtherPlayers(players_[i].transform_.x,players_[i].transform_.y);
+        }
         /*if(is_server_){
             players_[i].DrawPlayer(Server::Instance().clientes_names_[i]);
         }else{
@@ -71,7 +82,8 @@ bool GameManager::MovePlayer(){
 
     for (int i = 0; i < total_players_; i++){
 
-        if(players_[i].active_){
+        //Si estoy activo y soy yo, me muevo
+        if(players_[i].active_ && players_[i].id_ == Cliente::Instance().my_id_){
            //printf("Active ");
             players_[i].MovePlayer();
         }
@@ -104,7 +116,36 @@ void GameManager::AddPlayer(int id){
 
 
 void GameManager::RecivePlayer(){
+    sockaddr_in ip_tmp;
+    Paquete paq;
+    FD_ZERO(&readfs_);
+    FD_SET(sock_,&readfs_);
 
+    printf("Mirando a ver si entra alguien mas...\n");
+    int respuesta = select(0,&readfs_,NULL,NULL,&time_);
+    if(respuesta == 0){
+        //printf("Timeout...\n");
+    }else{
+        //Hay algo
+        memset(&paq,0,sizeof(paq));
+        if(FD_ISSET(sock_,&readfs_)){
+            int bytes = recvfrom(sock_,(char*)&paq,sizeof(paq),0,(SOCKADDR*)&ip_tmp,&ip_size_);
+            if(bytes > 0){
+                //ReadPaquete(paq,ip_tmp);
+                printf("Llega paquete\n");
+                if(paq.type == 2){
+                    printf("Paquete tipo nuevo player\n");
+                    //Soy cliente y el server me dice que hay un nuevo player
+                    if(paq.newP.id != Cliente::Instance().my_id_){
+                        //eeee nuevo player
+                        printf("yeeeee nuevo player con id->%d\n",paq.newP.id);
+                        AddPlayer(paq.newP.id);
+                    }
+                }
+            }
+            //printf("escuchao\n");
+        }
+    }
 
 }
 

@@ -1,6 +1,7 @@
 #include "server.h"
 #include <winsock.h>
 #include <stdio.h>
+#include "gameManager.h"
 //#include "paquete.h"
 
 
@@ -38,20 +39,49 @@ void Server::Deploy(){
 void Server::ReadPaquete(Paquete paq, sockaddr_in ip){
     switch(paq.type){
         case 0:
-        //Paquete tipo conexion
-        printf("Conectado %s:%d -> %s",inet_ntoa(ip.sin_addr),ntohs(ip.sin_port),paq.con.name);
-        ips_[total_clients_] = ip; //Guardamos la ip del cliente que se acaba de conectar
-        strcpy(clientes_names_[total_clients_],paq.con.name); //Guardamos el nombre del cliente
-        paq.con.id = total_clients_;
+            //Paquete tipo conexion
+            printf("Conectado %s:%d -> %s",inet_ntoa(ip.sin_addr),ntohs(ip.sin_port),paq.con.name);
+            ips_[total_clients_] = ip; //Guardamos la ip del cliente que se acaba de conectar
+            strcpy(clientes_names_[total_clients_],paq.con.name); //Guardamos el nombre del cliente
+            paq.con.id = total_clients_;
 
-        //Reenviamos la id del cliente asignada
-        sendto(sock_,(char*)&paq,sizeof(paq),0,(SOCKADDR*)&ip,ip_size_);
+            //Creamos un nuevo jugador con la id actual
+            GameManager::Instance().AddPlayer(total_clients_); //Añadimos nuevo jugador
 
-        total_clients_++;
+            //Reenviamos la id del cliente asignada
+            sendto(sock_,(char*)&paq,sizeof(paq),0,(SOCKADDR*)&ip,ip_size_);
+
+
+            //Llega el primer cliente(nada)
+            //Llega el segundo:
+            /*
+                - Le envio a todo el mundo todas las ids que tengo
+                - Los clientes comprueban todas las ids y añaden a los jugadores que no sean de su misma id
+            
+            */
+
+            //Avisamos a los demas jugadores de que hay un nuevo jugador y tienen que pintarlo
+            for(int i = 0; i <= total_clients_; i++){
+                printf("*** AVISO A NAVEGANTES *** ");
+                printf("Avisando a %s:%d\n",clientes_names_[i],i);
+                sendto(sock_,(char*)&paq,sizeof(paq),0,(SOCKADDR*)&ips_[i],ip_size_);
+            } 
+
+            total_clients_++;
         break;
         case 1:
-        //Paquete tipo accion
+            //Paquete tipo accion
+            //printf("Paquete de accion\n");
+            printf("El jugador con id %d:%s quiere moverse en X[%f] Y[%f]\n",paq.action.id,clientes_names_[paq.action.id],paq.action.movimiento.x,paq.action.movimiento.y);
+            Movimiento new_pos = GameManager::Instance().Move(paq.action.id,paq.action.movimiento);
+            paq.action.movimiento = new_pos;
 
+            //Comprobamos si planta bomba
+            if(paq.action.bomba){
+                GameManager::Instance().PlantBomb(new_pos.x,new_pos.y);
+            }
+            //Devuelvo la nueva posicion cambiada
+            sendto(sock_,(char*)&paq,sizeof(paq),0,(SOCKADDR*)&ip,ip_size_);
         break;
     }
 
@@ -62,7 +92,7 @@ void Server::Listen(){
     sockaddr_in ip_tmp;
     FD_ZERO(&readfs_);
     FD_SET(sock_,&readfs_);
-    char buffer[256];
+    //char buffer[256];
 
     int respuesta = select(0,&readfs_,NULL,NULL,&time_);
     if(respuesta == 0){

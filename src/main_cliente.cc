@@ -47,8 +47,9 @@ int esat::main(int argc, char **argv) {
     gameManger.DrawScenario();
     gameManger.DrawPlayer();
     gameManger.MovePlayer();
+    gameManger.RecivePlayer();
 
-    
+
 
     do{//Control fps
     		current_time = esat::Time();

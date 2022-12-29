@@ -23,6 +23,7 @@ class Player{
     esat::SpriteHandle sprite_;
     void DrawPlayer(char name[256]);
     bool MovePlayer();
+    void DrawOtherPlayers(float x, float y);
 
     float speed_;
 
